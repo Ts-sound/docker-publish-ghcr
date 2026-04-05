@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Publish to GHCR
-        uses: your-username/docker-publish-ghcr@v1
+        uses: Ts-sound/docker-publish-ghcr@v1
         with:
           image_name: your-repo
 ```
@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Publish to GHCR
-        uses: your-username/docker-publish-ghcr@v1
+        uses: Ts-sound/docker-publish-ghcr@v1
         with:
           image_name: your-repo
           tag: ''                        # 空则自动使用 git tag 或 commit SHA
@@ -132,7 +132,7 @@ jobs:
   build:
     steps:
       - uses: actions/checkout@v4
-      - uses: your-username/docker-publish-ghcr@v1
+      - uses: Ts-sound/docker-publish-ghcr@v1
         with:
           image_name: your-repo
 ```
@@ -150,7 +150,7 @@ jobs:
   build:
     steps:
       - uses: actions/checkout@v4
-      - uses: your-username/docker-publish-ghcr@v1
+      - uses: Ts-sound/docker-publish-ghcr@v1
         with:
           image_name: your-repo
           push: ${{ github.event_name != 'pull_request' }}
@@ -159,7 +159,7 @@ jobs:
 ### 场景 3: 多架构构建
 
 ```yaml
-- uses: your-username/docker-publish-ghcr@v1
+- uses: Ts-sound/docker-publish-ghcr@v1
   with:
     image_name: your-repo
     platforms: linux/amd64,linux/arm64,linux/arm/v7

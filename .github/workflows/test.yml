@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Build and push to GHCR
-        uses: ./
+        uses: Ts-sound/docker-publish-ghcr@v1
         with:
           image_name: test-docker-publish-ghcr
           tag: ''
