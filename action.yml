@@ -57,7 +57,7 @@ runs:
       id: image
       run: |
         REPO_NAME="${{ inputs.image_name }}"
-        REPO_OWNER="${GITHUB_REPOSITORY_OWNER}@L"  # to lower case
+        REPO_OWNER="${GITHUB_REPOSITORY_OWNER@L}"  # to lower case
         IMAGE_NAME="${REPO_OWNER}/${REPO_NAME}"
 
         echo "IMAGE_NAME=${IMAGE_NAME}"
