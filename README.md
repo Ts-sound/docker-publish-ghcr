@@ -37,7 +37,7 @@ jobs:
       - name: Publish to GHCR
         uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
 ```
 
 ### Full Configuration
@@ -60,7 +60,7 @@ jobs:
       - name: Publish to GHCR
         uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
           tag: ''                        # Auto-detects git tag or uses commit SHA
           latest_tag: 'true'             # Add latest tag
           docker_context: '.'            # Docker build context
@@ -76,7 +76,7 @@ jobs:
 
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
-| `image_name` | ✅ | - | Image name (format: `username/repo`) |
+| `image_name` | ✅ | - | Image name (repository name only, owner is auto-detected from `github.repository_owner`) |
 | `tag` | ❌ | `''` | Image tag. Auto-detects git tag or uses commit SHA if empty |
 | `latest_tag` | ❌ | `'true'` | Add `latest` tag |
 | `docker_context` | ❌ | `'.'` | Docker build context directory |
@@ -87,11 +87,22 @@ jobs:
 
 ## Tag Strategy
 
-| Trigger | Generated Tags |
-|---------|----------------|
-| `tag` parameter specified | `ghcr.io/user/repo:<tag>` + `latest` |
-| Git tag (e.g., v1.2.3) | `ghcr.io/user/repo:v1.2.3` + `latest` |
-| Regular push | `ghcr.io/user/repo:<commit-sha>` + `latest` |
+| Tag Strategy | Generated Tags |
+|--------------|----------------|
+| `tag` parameter specified | `ghcr.io/owner/repo:<tag>` + `latest` |
+| Git tag (e.g., v1.2.3) | `ghcr.io/owner/repo:v1.2.3` + `latest` |
+| Regular push | `ghcr.io/owner/repo:<commit-sha>` + `latest` |
+
+### Output Images
+
+For `image_name: your-repo` with git tag `v1`:
+
+```
+ghcr.io/ts-sound/your-repo:v1
+ghcr.io/ts-sound/your-repo:latest
+```
+
+The owner (`ts-sound`) is automatically derived from `github.repository_owner` (converted to lowercase).
 
 ## Requirements
 
@@ -123,7 +134,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
 ```
 
 ### Example 2: Build but Don't Push on PR
@@ -141,7 +152,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
           push: ${{ github.event_name != 'pull_request' }}
 ```
 
@@ -150,7 +161,7 @@ jobs:
 ```yaml
 - uses: your-username/docker-publish-ghcr@v1
   with:
-    image_name: your-username/your-repo
+    image_name: your-repo
     platforms: linux/amd64,linux/arm64,linux/arm/v7
 ```
 

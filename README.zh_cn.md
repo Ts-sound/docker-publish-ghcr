@@ -37,7 +37,7 @@ jobs:
       - name: Publish to GHCR
         uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
 ```
 
 ### 完整配置示例
@@ -60,7 +60,7 @@ jobs:
       - name: Publish to GHCR
         uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
           tag: ''                        # 空则自动使用 git tag 或 commit SHA
           latest_tag: 'true'             # 是否添加 latest 标签
           docker_context: '.'            # Docker 构建上下文
@@ -76,7 +76,7 @@ jobs:
 
 | 参数 | 必填 | 默认值 | 说明 |
 |------|------|--------|------|
-| `image_name` | ✅ | - | 镜像名称 (格式：`username/repo`) |
+| `image_name` | ✅ | - | 镜像名称（仅仓库名，所有者自动从 `github.repository_owner` 获取） |
 | `tag` | ❌ | `''` | 镜像标签。空则自动使用 git tag 或 commit SHA |
 | `latest_tag` | ❌ | `'true'` | 是否添加 `latest` 标签 |
 | `docker_context` | ❌ | `'.'` | Docker 构建上下文目录 |
@@ -89,9 +89,20 @@ jobs:
 
 | 触发条件 | 生成的标签 |
 |----------|------------|
-| `tag` 参数指定 | `ghcr.io/user/repo:<tag>` + `latest` |
-| git tag (如 v1.2.3) | `ghcr.io/user/repo:v1.2.3` + `latest` |
-| 普通 push | `ghcr.io/user/repo:<commit-sha>` + `latest` |
+| `tag` 参数指定 | `ghcr.io/owner/repo:<tag>` + `latest` |
+| git tag (如 v1.2.3) | `ghcr.io/owner/repo:v1.2.3` + `latest` |
+| 普通 push | `ghcr.io/owner/repo:<commit-sha>` + `latest` |
+
+### 输出镜像示例
+
+对于 `image_name: your-repo` 和 git 标签 `v1`:
+
+```
+ghcr.io/ts-sound/your-repo:v1
+ghcr.io/ts-sound/your-repo:latest
+```
+
+所有者（`ts-sound`）自动从 `github.repository_owner` 获取（转换为小写）。
 
 ## 前置要求
 
@@ -123,7 +134,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
 ```
 
 ### 场景 2: PR 时仅构建不推送
@@ -141,7 +152,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: your-username/docker-publish-ghcr@v1
         with:
-          image_name: your-username/your-repo
+          image_name: your-repo
           push: ${{ github.event_name != 'pull_request' }}
 ```
 
@@ -150,7 +161,7 @@ jobs:
 ```yaml
 - uses: your-username/docker-publish-ghcr@v1
   with:
-    image_name: your-username/your-repo
+    image_name: your-repo
     platforms: linux/amd64,linux/arm64,linux/arm/v7
 ```
 
