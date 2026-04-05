@@ -1,0 +1,24 @@
+name: Test Docker Build & Push
+
+on:
+  push:
+    branches: ['main']
+    tags: ['v*.*.*']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and push to GHCR
+        uses: ./
+        with:
+          image_name: ${{ github.repository_owner }}/test-docker-publish-ghcr
+          tag: ''
+          latest_tag: 'true'
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
