@@ -23,6 +23,10 @@ on:
   push:
     tags: ['v*.*.*']
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
