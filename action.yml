@@ -1,6 +1,6 @@
 name: 'Docker Build & Push to GHCR'
 description: 'Build Docker images and push to GitHub Packages (ghcr.io) with one click'
-author: 'Your GitHub Username'
+author: 'Ts-sound'
 
 inputs:
   image_name:
@@ -25,7 +25,7 @@ inputs:
   platforms:
     description: 'Build platforms (comma-separated)'
     required: false
-    default: 'linux/amd64,linux/arm64'
+    default: ''
   push:
     description: 'Whether to push the image'
     required: false
@@ -60,6 +60,11 @@ runs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ github.token }}
+      shell: bash
+
+    - name: Set up QEMU
+      if: ${{ inputs.platforms != '' }}
+      uses: docker/setup-qemu-action@v3
       shell: bash
 
     - name: Set up Docker Buildx

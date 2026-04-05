@@ -20,5 +20,4 @@ jobs:
           image_name: ${{ github.repository_owner }}/test-docker-publish-ghcr
           tag: ''
           latest_tag: 'true'
-          platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}

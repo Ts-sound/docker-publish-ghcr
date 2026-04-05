@@ -1,5 +1,7 @@
 # docker-publish-ghcr
 
+**中文** | [English Documentation](README.md)
+
 一键构建 Docker 镜像并发布到 GitHub Packages (ghcr.io) 的 GitHub Composite Action。
 
 ## 功能特性
@@ -8,6 +10,7 @@
 - ✅ **多平台构建** - 支持 linux/amd64, linux/arm64 等跨平台构建
 - ✅ **构建缓存加速** - 使用 GitHub Actions 缓存加速构建
 - ✅ **可配置参数** - 灵活的输入参数满足各种场景
+- ✅ **QEMU 自动检测** - 跨平台构建时自动启用 QEMU
 
 ## 使用方式
 
@@ -58,7 +61,7 @@ jobs:
           latest_tag: 'true'             # 是否添加 latest 标签
           docker_context: '.'            # Docker 构建上下文
           dockerfile: 'Dockerfile'       # Dockerfile 路径
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64  # 空 = 使用运行器原生架构
           push: 'true'                   # 是否推送 (PR 时可设为 false)
           build_args: |                  # Docker 构建参数
             ARG1=value1
@@ -74,7 +77,7 @@ jobs:
 | `latest_tag` | ❌ | `'true'` | 是否添加 `latest` 标签 |
 | `docker_context` | ❌ | `'.'` | Docker 构建上下文目录 |
 | `dockerfile` | ❌ | `'Dockerfile'` | Dockerfile 路径 |
-| `platforms` | ❌ | `linux/amd64,linux/arm64` | 构建平台 (逗号分隔) |
+| `platforms` | ❌ | `''` | 构建平台 (逗号分隔)。空 = 使用运行器原生架构。跨平台时自动启用 QEMU |
 | `push` | ❌ | `'true'` | 是否推送镜像 |
 | `build_args` | ❌ | `''` | Docker 构建参数 (每行一个) |
 
@@ -146,6 +149,8 @@ jobs:
     image_name: your-username/your-repo
     platforms: linux/amd64,linux/arm64,linux/arm/v7
 ```
+
+> **注意：** 当指定与运行器不同的平台时，QEMU 会自动启用来进行跨平台模拟构建。
 
 ## 许可证
 
