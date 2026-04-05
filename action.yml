@@ -1,37 +1,37 @@
 name: 'Docker Build & Push to GHCR'
-description: '一键构建 Docker 镜像并发布到 GitHub Packages (ghcr.io)'
+description: 'Build Docker images and push to GitHub Packages (ghcr.io) with one click'
 author: 'Your GitHub Username'
 
 inputs:
   image_name:
-    description: '镜像名称 (格式：username/repo)'
+    description: 'Image name (format: username/repo)'
     required: true
   tag:
-    description: '镜像版本标签 (支持 git tag 自动检测)'
+    description: 'Image tag (supports auto-detection of git tags)'
     required: false
     default: ''
   latest_tag:
-    description: '是否附加 latest 标签'
+    description: 'Whether to add latest tag'
     required: false
     default: 'true'
   docker_context:
-    description: 'Docker 构建上下文目录'
+    description: 'Docker build context directory'
     required: false
     default: '.'
   dockerfile:
-    description: 'Dockerfile 路径'
+    description: 'Dockerfile path'
     required: false
     default: 'Dockerfile'
   platforms:
-    description: '构建平台 (逗号分隔)'
+    description: 'Build platforms (comma-separated)'
     required: false
     default: 'linux/amd64,linux/arm64'
   push:
-    description: '是否推送镜像'
+    description: 'Whether to push the image'
     required: false
     default: 'true'
   build_args:
-    description: 'Docker 构建参数 (每行一个)'
+    description: 'Docker build arguments (one per line)'
     required: false
     default: ''
 
@@ -79,31 +79,4 @@ runs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         build-args: ${{ inputs.build_args }}
-      shell: bash
-
-    # 2. 登录GHCR
-    - name: Login to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ github.token }}
-      shell: bash
-
-    # 3. 配置Buildx
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      shell: bash
-
-    # 4. 构建+推送（内置缓存加速）
-    - name: Build and push
-      uses: docker/build-push-action@v5
-      with:
-        context: ${{ inputs.docker_context }}
-        push: ${{ inputs.push }}
-        tags: |
-          ghcr.io/${{ inputs.image_name }}:${{ inputs.tag }}
-          ${{ inputs.latest_tag == 'true' && format('ghcr.io/{0}:latest', inputs.image_name) || '' }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
       shell: bash
