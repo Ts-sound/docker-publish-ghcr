@@ -14,7 +14,7 @@ jobs:
       - name: Build and push to GHCR
         uses: ./
         with:
-          image_name: ${{ github.repository_owner }}/test-docker-publish-ghcr
+          image_name: test-docker-publish-ghcr
           tag: ''
           latest_tag: 'true'
           push: 'true'
