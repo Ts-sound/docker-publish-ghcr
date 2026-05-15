@@ -84,6 +84,7 @@ jobs:
 | `platforms` | ❌ | `''` | Build platforms (comma-separated). Empty = runner's native architecture. QEMU is automatically enabled for cross-platform builds |
 | `push` | ❌ | `'true'` | Whether to push the image |
 | `build_args` | ❌ | `''` | Docker build arguments (one per line) |
+| `submodules` | ❌ | `'false'` | Git submodules checkout mode. Set to `'recursive'` to include submodules |
 
 ## Tag Strategy
 
@@ -97,7 +98,7 @@ jobs:
 
 For `image_name: your-repo` with git tag `v1`:
 
-```
+```text
 ghcr.io/ts-sound/your-repo:v1
 ghcr.io/ts-sound/your-repo:latest
 ```
